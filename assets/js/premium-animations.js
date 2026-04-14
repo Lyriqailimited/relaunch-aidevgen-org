@@ -417,9 +417,13 @@
       var particlesJs = document.getElementById('particles-js');
       if (heroSection && particlesJs) {
         scroll(function(info) {
-          var progress = info.y.progress;
-          particlesJs.style.transform = 'translateY(' + (progress * 80) + 'px)';
-          particlesJs.style.opacity = String(1 - progress * 0.5);
+          // Support both motionone@1.x ({y:{progress}}) and newer APIs (plain number)
+          var progress = (info && info.y && info.y.progress != null) ? info.y.progress
+                       : (typeof info === 'number' ? info : 0);
+          try {
+            particlesJs.style.transform = 'translateY(' + (progress * 80) + 'px)';
+            particlesJs.style.opacity = String(1 - progress * 0.5);
+          } catch(e2) {}
         }, {
           target: heroSection,
           offset: ['start start', 'end start']
@@ -433,8 +437,12 @@
       var detailHeroImg = document.querySelector('.service-detail-hero__image');
       if (detailHero && detailHeroImg) {
         scroll(function(info) {
-          var progress = info.y.progress;
-          detailHeroImg.style.transform = 'scale(' + (1 + progress * 0.05) + ')';
+          // Support both motionone@1.x ({y:{progress}}) and newer APIs (plain number)
+          var progress = (info && info.y && info.y.progress != null) ? info.y.progress
+                       : (typeof info === 'number' ? info : 0);
+          try {
+            detailHeroImg.style.transform = 'scale(' + (1 + progress * 0.05) + ')';
+          } catch(e2) {}
         }, {
           target: detailHero,
           offset: ['start end', 'end start']
